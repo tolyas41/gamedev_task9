@@ -1,54 +1,49 @@
 #pragma once
-#include "ContainerIterator.h"
+#include <memory>
+#include <vector>
+#include <fstream>
 
-
+template <typename T>
 class Container
 {
-
-	Matrix* MatrixObj = nullptr;
 	size_t Size = 0;
 	size_t Capacity = 0;
+	std::unique_ptr<T[]> DataPtr = std::make_unique<T[]>(Size);
+	std::vector<std::string> Actions;
+	friend class ActionFunctor;
 
 public:
 
-	using Iterator = ContainerIterator;
-
 	Container();
-
 	~Container();
 
-	void PushBack(const Matrix& obj);
+	void LoadAction();
 
-	void PushBack(Matrix&& obj);
+	void PushBack(const T& obj);
+
+	void PushBack(T&& obj);
 
 	void PopBack();
 
-	void Clear();
-
-	Matrix& EmplaceBack(int data, size_t rows, size_t columns);
+	T& EmplaceBack(int data, size_t rows, size_t columns);
 
 	size_t GetSize() const;
 
-	Iterator begin()
-	{
-		return Iterator(MatrixObj);
-	}
+	void DeleteT(size_t index);
 
-	Iterator end()
-	{
-		return Iterator(MatrixObj + Size);
-	}
-
-	void SortMatrices();
-
-	void DeleteMatrix(size_t index);
-
-	Matrix& operator[] (size_t index);
+	T& operator[] (size_t index);
 
 	void PrintMatrices();
 
+	T Calculate();
+
+	//test foo
+	void PrintActions();
+
 private:
+
 	void ReAllocation(size_t newCapacity);
 
 };
 
+#include "Container.inl"

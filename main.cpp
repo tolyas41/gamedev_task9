@@ -1,42 +1,39 @@
 #include "Matrix.h"
 #include <vector>
 #include <iostream>
-#include "Container.h"
+#include <memory>
 
+#include "Container.h"
+#include "ActionFunctor.h"
 
 int main() {
 
-
-	Matrix obj0(5, 3, 3);
-	Matrix obj1(1, 2, 2);
-	Matrix obj2(2, 4, 4);
+	Matrix obj0(9, 3, 3);
+	Matrix obj1(4, 3, 3);
+	Matrix obj2(1, 3, 3);
 	Matrix obj3(3, 3, 3);
 	Matrix obj4(4, 3, 3);
 	Matrix obj5(5, 3, 3);
 
-	Container mat1;
+	Container<Matrix> mat1;
 
 	mat1.PushBack(obj0);
 	mat1.PushBack(obj1);
 	mat1.PushBack(obj2);
-	mat1.PushBack(Matrix(33, 2, 2));
-
-	mat1.EmplaceBack(2, 3, 2);
-
-	//mat1.PrintMatrices();
-	//mat1.PopBack();
-	//mat1.PopBack();
-	//mat1.PrintMatrices();
+	mat1.PushBack(obj3);
+	mat1.PushBack(obj4);
+	mat1.PushBack(obj5);
+	mat1.PrintMatrices();
 
 
-	mat1.SortMatrices();
+	mat1.LoadAction();
+	mat1.PrintActions();
+	mat1.Calculate().print_array();
 
-	for (Container::Iterator it = mat1.begin();
-		it != mat1.end(); it.next())
-	{
-		it->print_array();
-	}
-
+	ActionFunctor action;
+	std::string actions = "+-*";
+	std::cout << "action functor's result with " << actions << " is : \n";
+	action(actions, mat1).print_array();
 
 
 	return 0;
