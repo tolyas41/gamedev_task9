@@ -1,10 +1,10 @@
 #include "Matrix.h"
+#include "Container.h"
+#include "ActionFunctor.h"
 #include <vector>
 #include <iostream>
 #include <memory>
 
-#include "Container.h"
-#include "ActionFunctor.h"
 
 int main() {
 
@@ -17,6 +17,7 @@ int main() {
 
 	Container<Matrix> mat1;
 
+	//mat1.PushBack(Matrix(2,2,2));
 	mat1.PushBack(obj0);
 	mat1.PushBack(obj1);
 	mat1.PushBack(obj2);
@@ -31,9 +32,9 @@ int main() {
 	mat1.Calculate().print_array();
 
 	ActionFunctor action;
-	std::string actions = "+-*";
-	std::cout << "action functor's result with " << actions << " is : \n";
-	action(actions, mat1).print_array();
+	std::cout << "action functor's result is : \n";
+	std::string actionsstr = "++-*";
+	action.Calculate_functor(actionsstr, mat1).print_array();
 
 
 	return 0;
