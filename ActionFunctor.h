@@ -6,9 +6,6 @@
 
 class ActionFunctor
 {
-	//Create a class that stores map in itself for
-	//converting “action” lines into a functor for implementing this action.
-
 	Matrix result;
 
 	struct Functor
@@ -37,27 +34,23 @@ class ActionFunctor
 		}
 	};
 
-	typedef std::function<void(char action, Matrix& result, const Container<Matrix>& container, int i)> ActionFunction;
-
-	std::map <char, ActionFunction> ActionsMap;
-	std::map <char, ActionFunction>::iterator it = ActionsMap.begin();
+	std::map <char, std::function<void(char action, Matrix& result, const Container<Matrix>& container, int i)>> ActionsMap;
 
 public:
 
 	ActionFunctor()
 	{
-		ActionFunction func = Functor();
-		ActionsMap['+'] = func;
-		ActionsMap['-'] = func;
-		ActionsMap['*'] = func;
-		ActionsMap['/'] = func;
+		ActionsMap['+'] = Functor();
+		ActionsMap['-'] = Functor();
+		ActionsMap['*'] = Functor();
+		ActionsMap['/'] = Functor();
 	}
 
 	Matrix Calculate_functor(const std::string& actions, const Container<Matrix>& container)
 	{
 		int i = 0;
-		result = *container.DataArray[0];
-		for (const auto& action : actions)
+		result = *container.DataArray[i];
+		for (auto action : actions)
 		{
 			ActionsMap[action](action, result, container, i);
 			i++;

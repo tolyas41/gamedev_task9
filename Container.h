@@ -9,6 +9,7 @@ class Container
 {
 	size_t Size = 0;
 	size_t Capacity = 0;
+	size_t InitialCapacity = 2;
 	std::unique_ptr<std::unique_ptr<T>[]> DataArray = 
 		std::unique_ptr<std::unique_ptr<T>[]>(new std::unique_ptr<T>[Size]);
 	std::vector<std::string> Actions;
@@ -18,7 +19,24 @@ public:
 
 	Container()
 	{
-		ReAllocation(2);
+		ReAllocation(InitialCapacity);
+	}
+
+	Container(std::string actions)
+	{
+		for (auto action : actions)
+		{
+			Actions.push_back(std::string(1, action));
+		}
+		ReAllocation(InitialCapacity);
+	}
+
+	Container(const Container& source)
+	{
+		Size = source.Size;
+		Capacity = source.Capacity;
+		Actions = source.Actions;
+		CopyReAllocation(Capacity, source);
 	}
 
 	~Container()
@@ -152,14 +170,12 @@ private:
 
 	void ReAllocation(size_t newCapacity)
 	{
-
 		std::unique_ptr<std::unique_ptr<T>[]> newBlock 
 			= std::unique_ptr<std::unique_ptr<T>[]>(new std::unique_ptr<T>[newCapacity]);
 		for (size_t i = 0; i < newCapacity; i++)
 		{
 			newBlock[i] = std::make_unique<T>();
 		}
-
 
 		if (newCapacity < Size)
 			Size = newCapacity;
@@ -170,5 +186,21 @@ private:
 		Capacity = newCapacity;
 	}
 
+	void CopyReAllocation(size_t newCapacity, const Container& source)
+	{
+		std::unique_ptr<std::unique_ptr<T>[]> newBlock
+			= std::unique_ptr<std::unique_ptr<T>[]>(new std::unique_ptr<T>[newCapacity]);
+		for (size_t i = 0; i < newCapacity; i++)
+		{
+			newBlock[i] = std::make_unique<T>();
+		}
+
+		if (newCapacity < Size)
+			Size = newCapacity;
+
+		for (size_t i = 0; i < Size; i++)
+			*newBlock[i] = *source.DataArray[i];
+		DataArray = std::move(newBlock);
+	}
 };
 

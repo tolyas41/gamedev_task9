@@ -1,9 +1,7 @@
 #include "Matrix.h"
 #include "Container.h"
 #include "ActionFunctor.h"
-#include <vector>
 #include <iostream>
-#include <memory>
 
 
 int main() {
@@ -17,7 +15,6 @@ int main() {
 
 	Container<Matrix> mat1;
 
-	//mat1.PushBack(Matrix(2,2,2));
 	mat1.PushBack(obj0);
 	mat1.PushBack(obj1);
 	mat1.PushBack(obj2);
@@ -33,8 +30,16 @@ int main() {
 
 	ActionFunctor action;
 	std::cout << "action functor's result is : \n";
-	std::string actionsstr = "++-*";
-	action.Calculate_functor(actionsstr, mat1).print_array();
+	std::string actions_str = "++-*";
+	action.Calculate_functor(actions_str, mat1).print_array();
+
+
+	Container<Matrix> mat2(mat1);
+	std::cout << "mat2 matrices : \n";
+	mat2.PrintMatrices();
+
+	mat2.Calculate().print_array();
+
 
 
 	return 0;
